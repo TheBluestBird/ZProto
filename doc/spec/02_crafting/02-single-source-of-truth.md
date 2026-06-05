@@ -26,7 +26,7 @@ This makes extension fragile and introduces drift.
    - profession to room id map
    - skill id prefix map (for migration and validation use)
 2. Replace local arrays/maps in:
-   - task systems
+   - task simulation
    - action handlers
    - offline simulation
    - storage normalization

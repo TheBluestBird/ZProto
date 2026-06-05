@@ -23,19 +23,20 @@ export const DEFAULT_GATHERING_SKILL_BY_PROFESSION: Record<GatheringProfessionId
   river: 'fishing_1',
 };
 
+export const INITIAL_SKILL_BY_PROFESSION: Record<ProfessionId, string> = {
+  ...DEFAULT_GATHERING_SKILL_BY_PROFESSION,
+  carpentry: 'carpentry_1',
+  cooking: 'cooking_1',
+  blacksmithing: 'blacksmith_1',
+};
+
 export function getDefaultGatheringSkillId(
   professionId: ProfessionId,
 ): string | undefined {
-  switch (professionId) {
-    case 'forest':
-      return DEFAULT_GATHERING_SKILL_BY_PROFESSION.forest;
-    case 'mine':
-      return DEFAULT_GATHERING_SKILL_BY_PROFESSION.mine;
-    case 'river':
-      return DEFAULT_GATHERING_SKILL_BY_PROFESSION.river;
-    default:
-      return undefined;
+  if (!(professionId in DEFAULT_GATHERING_SKILL_BY_PROFESSION)) {
+    return undefined;
   }
+  return DEFAULT_GATHERING_SKILL_BY_PROFESSION[professionId as GatheringProfessionId];
 }
 
 const SKILL_PREFIX_TO_PROFESSION: Record<string, ProfessionId> = {

@@ -7,9 +7,10 @@ import { NavItem } from './NavItem';
 
 export interface OverlayProps {
   className?: string;
+  onLevelBadgeDoubleClick?: () => void;
 }
 
-export function Overlay({ className }: OverlayProps = {}) {
+export function Overlay({ className, onLevelBadgeDoubleClick }: OverlayProps = {}) {
   const { navigate, isActive } = useNavigation();
 
   const classes =
@@ -19,12 +20,12 @@ export function Overlay({ className }: OverlayProps = {}) {
   return (
     <div className={classes}>
       <header className="pointer-events-none w-full">
-        <Header />
+        <Header {...(onLevelBadgeDoubleClick ? { onLevelBadgeDoubleClick } : {})} />
       </header>
 
-      <footer className="pointer-events-none flex items-end justify-center pb-4">
-        <div className="pointer-events-auto origin-bottom scale-70">
-          <Panel layout="horizontal">
+      <footer className="pointer-events-none flex w-full items-end justify-center pb-0 sm:pb-4">
+        <div className="pointer-events-auto w-full origin-bottom sm:w-auto sm:scale-70">
+          <Panel layout="horizontal" className="w-full">
             {navBarPages.map((page) => (
               <NavItem
                 key={page.id}

@@ -44,8 +44,19 @@ export type CurrentTask = {
 
 export type Inventory = Record<string, number>;
 
+export type VisitPhase = 'incoming' | 'docked';
+
+export type VisitState = {
+  factionId: FactionId;
+  /** When the scheduled zeppelin arrives, ms since epoch. */
+  arrivalTime: number;
+  /** When the docked zeppelin departs, ms since epoch. */
+  departureTime: number;
+};
+
 export type GameState = {
   player: Player;
+  visit: VisitState;
   inventory: Inventory;
   professions: PlayerProfessions;
   nextQueueId: number;

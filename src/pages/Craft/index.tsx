@@ -1,7 +1,6 @@
 import { Workshop } from '@components/Book/Workshop';
 import { definePage } from '../definePage';
 
-import background from './assets/background.png';
 import icon from './assets/icon.png';
 
 export const craftPage = definePage({
@@ -9,6 +8,5 @@ export const craftPage = definePage({
   path: "/craft",
   title: "Craft",
   icon,
-  background,
   children: <Workshop name="Craft" professionType="craft" />,
 });

@@ -11,19 +11,3 @@
 .book > .page {
   border-radius: 0.875rem;
 }
-
-.book-tabs {
-  margin-bottom: calc(var(--book-tab-overlap) * -1);
-}
-
-.book-tab {
-  aspect-ratio: var(--book-tab-aspect-ratio);
-  max-width: var(--book-tab-max-width);
-  border: 0;
-  outline: none;
-  background-color: transparent;
-  background-image: var(--book-tab-bg);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-}

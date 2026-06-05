@@ -1,7 +1,7 @@
+import { FACTION_IDS } from '@game/domain/factions';
+import { INITIAL_SKILL_BY_PROFESSION } from '@game/domain/professions';
 import { initialLevelProgress } from '@game/progression';
-import {
-  getDefaultGatheringSkillId,
-} from '@game/domain/professions';
+import { scheduleVisit } from '@game/visit';
 import type { FactionId, GameState, PlayerProfession, PlayerSkill, ProfessionId } from '@game/state/types';
 
 export function createDefaultPlayerSkill(): PlayerSkill {
@@ -24,28 +24,25 @@ export function createEmptyProfession(): PlayerProfession {
 function createInitialProfession(professionId: ProfessionId): PlayerProfession {
   const profession = createEmptyProfession();
 
-  const skillId = getDefaultGatheringSkillId(professionId);
-  if (skillId !== undefined) {
-    profession.skills[skillId] = createDefaultPlayerSkill();
-  }
+  profession.skills[INITIAL_SKILL_BY_PROFESSION[professionId]] = createDefaultPlayerSkill();
 
   return profession;
 }
 
-export function createInitialState(): GameState {
+function createInitialReputation(): Record<FactionId, number> {
+  return Object.fromEntries(FACTION_IDS.map((id) => [id, 0])) as Record<FactionId, number>;
+}
+
+export function createInitialState(now = Date.now()): GameState {
   return {
     player: {
       name: 'Richard Bower',
       status: 'Newcomer',
       level: initialLevelProgress,
       gold: 0,
-      reputation: {
-        traders: 0,
-        aristocrats: 0,
-        mystics: 0,
-        artisans: 0,
-      } satisfies Record<FactionId, number>,
+      reputation: createInitialReputation(),
     },
+    visit: scheduleVisit(now),
     inventory: {},
     professions: {
       blacksmithing: createInitialProfession('blacksmithing'),

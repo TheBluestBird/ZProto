@@ -7,19 +7,10 @@ export function definePage({
   path,
   title,
   icon,
-  background,
-  transparentBackground,
   children,
 }: DefinePageOptions): PageDefinition {
   function Component() {
-    return (
-      <Page
-        background={background}
-        {...(transparentBackground !== undefined ? { transparentBackground } : {})}
-      >
-        {children}
-      </Page>
-    );
+    return <Page>{children}</Page>;
   }
 
   return {
@@ -27,7 +18,6 @@ export function definePage({
     path,
     title,
     icon,
-    background,
     Component,
   };
 }

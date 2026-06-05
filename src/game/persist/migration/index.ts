@@ -3,12 +3,19 @@ import type { GameState } from '@game/state/types';
 import type { SaveBlob } from '../type';
 
 import { migrateProfessions } from './01_professions';
+import { migrateFactions } from './02_factions';
+import { migrateStripAmbient } from './03_strip_ambient';
 
 function isSaveBlob(value: unknown): value is SaveBlob<unknown> {
   return typeof value === 'object' && value !== null && 'state' in value;
 }
 
-const migrations = [(state: unknown) => state, migrateProfessions];
+const migrations = [
+  (state: unknown) => state,
+  migrateProfessions,
+  migrateFactions,
+  migrateStripAmbient,
+];
 
 export function migrate(blob: unknown): GameState | null {
   if (!isSaveBlob(blob)) {

@@ -1,5 +1,6 @@
-import { createInitialState, createEmptyProfession } from '@game/state/initialState';
+import { FACTION_IDS } from '@game/domain/factions';
 import { PROFESSION_IDS } from '@game/domain/professions';
+import { createEmptyProfession, createInitialState } from '@game/state/initialState';
 import type { GameState } from '@game/state/types';
 
 import type { SaveBlob } from './type';
@@ -17,7 +18,12 @@ function isGameState(value: unknown): value is GameState {
     typeof state.player !== 'object' ||
     state.player === null ||
     typeof state.professions !== 'object' ||
-    state.professions === null
+    state.professions === null ||
+    typeof state.visit !== 'object' ||
+    state.visit === null ||
+    typeof state.visit.arrivalTime !== 'number' ||
+    typeof state.visit.departureTime !== 'number' ||
+    state.visit.departureTime <= state.visit.arrivalTime
   ) {
     return false;
   }
@@ -70,10 +76,14 @@ function normalizeLoadedState(state: GameState): GameState {
     player: {
       ...initial.player,
       ...state.player,
-      reputation: {
-        ...initial.player.reputation,
-        ...state.player.reputation,
-      },
+      reputation: FACTION_IDS.reduce((reputation, factionId) => {
+        reputation[factionId] = state.player.reputation[factionId] ?? 0;
+        return reputation;
+      }, { ...initial.player.reputation }),
+    },
+    visit: {
+      ...initial.visit,
+      ...state.visit,
     },
     inventory: {
       ...initial.inventory,

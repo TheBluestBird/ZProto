@@ -10,9 +10,10 @@ Queue processing, timed completion, skill XP.
 ## Files
 
 ```
-src/game/systems/tasks.ts
-src/game/systems/skills.ts
-src/game/actions/handlers.ts   # complete reduce + handlers
+src/game/tasks/simulation.ts
+src/game/professions/applySkill.ts
+src/game/actions/reduce.ts
+src/game/actions/handlers/
 ```
 
 ---

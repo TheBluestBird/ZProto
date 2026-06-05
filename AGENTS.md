@@ -27,3 +27,19 @@ The type is a SPA
 
 - doc: established concepts that need to be taken to consideration
 - doc/spec: specs that has are either in progress or have been complete. Each spec must be a directory, have phases.md as an overall plan and the status of the spec, the rest of the files inside of that directory are considered phase plans. Do this structure even if the spec is only one state.
+
+# Ground rules
+
+- There is a component for the debug menu (src/components/DebugPanel): it is called with the double click on the player level, all debug buttons must go there
+- All the global state is in src/game, it is prohibited to define game state structure outside of that directory and manage states anywhere but there.
+- If there is a change into a state of the player - the developer must define the migration to the new level of the state in src/game/persist/migration
+- It is prohibited to use in place components and UI elements. Common UI elements must be defined in /src/components, child components intended to be used along with it's parent must be defined within the directory of the parent
+- Defining a component make sure there is no component that is suitable for the task you are solving, if there is - prefer to use it and extend it, but not significantly!
+- Defining or editing a component follow the following procedure:
+    - if a component is simple - just create it as a file, starting with a Capital letter
+    - if for a component you need more than one file or plan to use assets create a directory starting with the Capital letter, locate all the files there, make index.tsx with the component root.
+    - prefer splitting the logics and responsibilities but avoid useless wrapper components or functions consisting of 3 - 5 lines of code.
+    - it is prohibited to use component assets outside of the component directory.
+    - keep the layout as simple as possible, avoid useless wrappers, never use BEM syntax, prefer Tailwind standard styles, avoid classes with [].
+    - you may use index.css for the component only if this is a better way to describe custom layout styles of the component or it's visual complexity.
+    - prefer styles defined in src/index.css for better support of the theming. Prefer deriving colors from defined to create gradients shadows and background. DO not define new constants, do not define custom overprecise offsets margins paddings font spacing line hights and try to adjust styles to the bare minimum. Consistency and extensibility is better than component perfection

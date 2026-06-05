@@ -13,19 +13,13 @@ export function CoinBadge({ className }: CoinBadgeProps = {}) {
 
   return (
     <div className={classes}>
-      <Panel layout="horizontal">
+      <Panel layout="horizontal" className="header-coin-badge">
         <div
-          className="flex shrink-0 items-center justify-center gap-3 px-2 py-1 text-button-text"
+          className="coin-badge-inner"
           aria-label={`Gold: ${gold}`}
         >
-          <img
-            className="size-6 shrink-0 object-contain"
-            src={coinIcon}
-            alt=""
-            aria-hidden
-            decoding="async"
-          />
-          <h2 className="-mt-1 min-w-[3ch] tabular-nums text-right">{formatResourceValue(gold)}</h2>
+          <img src={coinIcon} alt="" decoding="async" />
+          <p className="coin-amount">{formatResourceValue(gold)}</p>
         </div>
       </Panel>
     </div>

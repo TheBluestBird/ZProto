@@ -1,5 +1,5 @@
 import { ValueBadge, coinIcon, reputationIcon } from '@components/ValueBadge';
-import type { FactionQuest } from '@game/factions';
+import type { FactionQuest } from '@game/library/types';
 
 export function QuestRewards({ reward }: { reward: FactionQuest['reward'] }) {
   const hasBlueprint = reward.blueprints > 0;

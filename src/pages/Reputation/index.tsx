@@ -9,17 +9,14 @@ import { NewTag } from '@components/BurningDot';
 import { Frame } from '@components/Frame';
 import { LevelBadge } from '@components/LevelBadge';
 import { ScrollArea } from '@components/ScrollArea';
-import {
-  factions,
-  factionOrder,
-  type Faction,
-  type FactionMilestone,
-  type FactionQuest,
-} from '@game/factions';
+import { FACTION_IDS } from '@game/domain/factions';
+import { useGameState } from '@game/hooks/useGameState';
+import { gameLibrary } from '@game/library/gameLibrary';
+import type { FactionId } from '@game/state/types';
+import type { FactionMilestone, FactionQuest } from '@game/library/types';
 
 import { definePage } from '../definePage';
 
-import background from './assets/background.png';
 import icon from './assets/icon.png';
 
 function DetailedQuestCard({ quest }: { quest: FactionQuest }) {
@@ -110,36 +107,48 @@ function MilestoneRow({ milestone, index }: { milestone: FactionMilestone; index
   );
 }
 
-function factionPanel(faction: Faction) {
+function FactionReputationPanel({ factionId }: { factionId: FactionId }) {
+  const faction = gameLibrary.factions[factionId];
+  const reputation = useGameState((state) => state.player.reputation[factionId]);
+
   return (
-    <div className="flex h-full min-h-0 flex-col gap-4">
-      <div className="flex shrink-0 gap-4">
-        <CaptainSidebar faction={faction} />
+    <div className="flex h-full min-h-0 flex-col gap-3">
+      <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:gap-4">
+        <CaptainSidebar faction={faction} reputation={reputation} />
         <LorePanel title="What we know">
           <p>{faction.lore}</p>
         </LorePanel>
       </div>
 
-      <div className="flex min-h-0 flex-1">
-        <div className="flex min-h-0 min-w-0 flex-[3] flex-col">
+      <div className="grid min-h-0 flex-1 grid-cols-1 sm:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+        <ScrollArea className="min-h-0">
           <SectionHeading>Captain&apos;s errands</SectionHeading>
-          <ScrollArea className="min-h-0 flex-1">
-            {faction.quests.map((q) => (
-              <DetailedQuestCard key={q.id} quest={q} />
-            ))}
-          </ScrollArea>
-        </div>
-
-        <div className="flex min-h-0 min-w-0 flex-[2] flex-col border-l border-border-subtle pl-2">
+          {faction.quests.map((q) => (
+            <DetailedQuestCard key={q.id} quest={q} />
+          ))}
+        </ScrollArea>
+        <ScrollArea className="min-h-0 border-t border-border-subtle pt-3 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-2">
           <SectionHeading>Reputation rewards</SectionHeading>
-          <ScrollArea className="min-h-0 flex-1">
-            {faction.milestones.map((m, i) => (
-              <MilestoneRow key={m.reputation} milestone={m} index={i} />
-            ))}
-          </ScrollArea>
-        </div>
+          {faction.milestones.map((m, i) => (
+            <MilestoneRow key={m.reputation} milestone={m} index={i} />
+          ))}
+        </ScrollArea>
       </div>
     </div>
+  );
+}
+
+function ReputationBook() {
+  return (
+    <Book
+      name="Reputation"
+      panels={FACTION_IDS.map((id) => ({
+        id,
+        label: gameLibrary.factions[id].name,
+        icon: gameLibrary.factions[id].crest,
+        content: <FactionReputationPanel factionId={id} />,
+      }))}
+    />
   );
 }
 
@@ -148,16 +157,5 @@ export const reputationPage = definePage({
   path: "/reputation",
   title: "Reputation",
   icon,
-  background,
-  children: (
-    <Book
-      name="Reputation"
-      panels={factionOrder.map((id) => ({
-        id,
-        label: factions[id].name,
-        icon: factions[id].crest,
-        content: factionPanel(factions[id]),
-      }))}
-    />
-  ),
+  children: <ReputationBook />,
 });

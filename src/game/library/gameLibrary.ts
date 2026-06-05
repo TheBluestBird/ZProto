@@ -1,3 +1,4 @@
+import { libraryFactions } from '@game/library/factions';
 import { libraryItems } from '@game/library/items';
 import { libraryProfessions } from '@game/library/professions';
 import { librarySkills } from '@game/library/skills';
@@ -13,6 +14,7 @@ export const gameLibrary: GameLibrary = {
   professions: libraryProfessions,
   skills: librarySkills,
   items: libraryItems,
+  factions: libraryFactions,
 };
 
 export function getProfession(id: ProfessionId): LibraryProfession {

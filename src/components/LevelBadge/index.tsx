@@ -7,6 +7,7 @@ export interface LevelBadgeProps {
   level: LevelProgress;
   size?: Size;
   className?: string;
+  onDoubleClick?: () => void;
 }
 
 const sizeClasses: Record<Size, { container: string; label: string }> = {
@@ -28,13 +29,19 @@ export function LevelBadge({
   level,
   size = 'normal',
   className,
+  onDoubleClick,
 }: LevelBadgeProps) {
   const classes = sizeClasses[size];
 
   return (
     <div
-      className={`relative grid place-items-center text-button-text ${classes.container}${className ? ' ' + className : ''}`}
+      className={`relative grid select-none place-items-center text-button-text ${classes.container}${className ? ' ' + className : ''}${onDoubleClick ? ' cursor-pointer' : ''}`}
       aria-label={`Level ${level.value}`}
+      onDoubleClick={(event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        onDoubleClick?.();
+      }}
     >
       <img
         className="pointer-events-none col-start-1 row-start-1 size-full object-contain"
@@ -44,7 +51,7 @@ export function LevelBadge({
         decoding="async"
       />
       <h2
-        className={`z-10 col-start-1 row-start-1 text-center leading-none ${classes.label} -mt-1`}
+        className={`z-10 col-start-1 row-start-1 select-none text-center leading-none ${classes.label} -mt-1`}
       >
         {level.value}
       </h2>

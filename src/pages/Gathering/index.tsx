@@ -1,7 +1,6 @@
 import { Workshop } from '@components/Book/Workshop';
 import { definePage } from '../definePage';
 
-import background from './assets/background.png';
 import icon from './assets/icon.png';
 
 export const gatheringPage = definePage({
@@ -9,6 +8,5 @@ export const gatheringPage = definePage({
   path: "/gathering",
   title: "Gathering",
   icon,
-  background,
   children: <Workshop name="Gathering" professionType="gathering" />,
 });

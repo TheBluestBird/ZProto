@@ -1,10 +1,11 @@
+import { PROFESSION_IDS } from '@game/domain/professions';
+import type { GameLibrary } from '@game/library/types';
 import {
   completeCurrentTask,
   startAllNextTasks,
-} from '@game/systems/tasks';
-import { PROFESSION_IDS } from '@game/domain/professions';
-import type { GameLibrary } from '@game/library/types';
+} from '@game/tasks/simulation';
 import type { GameState, ProfessionId } from '@game/state/types';
+import { advanceVisit } from '@game/visit';
 
 export function applyOfflineProgress(
   state: GameState,
@@ -38,10 +39,7 @@ export function applyOfflineProgress(
     simulatedTime = finishAt;
   }
 
-  return {
-    ...next,
-    lastTickAt: now,
-  };
+  return advanceVisit({ ...next, lastTickAt: now }, now);
 }
 
 function findEarliestFinishingTask(

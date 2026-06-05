@@ -1,4 +1,4 @@
-import { startNextTask } from '@game/systems/tasks';
+import { startNextTask } from '@game/tasks/simulation';
 import type { Plan } from '@game/events/Plan';
 import type { GameLibrary } from '@game/library/types';
 import type { GameState } from '@game/state/types';

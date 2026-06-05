@@ -3,10 +3,8 @@ import { Application, Container } from 'pixi.js';
 
 import { GameStageContext, type GameStageValue } from './GameStageContext';
 
-// The canvas must receive pointer events so Pixi can hit-test interactive world
-// objects (e.g. clickable tower rooms). The DOM page layers above it are made
-// transparent to events (pointer-events-none) on world-only pages so clicks fall
-// through to here; interactive DOM (HUD/nav) re-enables events on its own nodes.
+// The canvas stays behind DOM UI. Page layers use pointer-events-none by default;
+// interactive DOM (tower room hits, HUD, nav) re-enables events on its own nodes.
 const CANVAS_CLASS = 'fixed inset-0 z-0 size-full';
 const MAX_DPR = 1.5;
 const MAX_FPS = 30;

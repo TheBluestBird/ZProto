@@ -4,12 +4,14 @@ import dotDes from './assets/dot_des.png';
 import dotEn from './assets/dot_en.png';
 
 /**
- * - `above`: centered over a positioned anchor (book tabs).
+ * - `inline`: in document flow (book tabs — avoids clipping under overflow-hidden ancestors).
+ * - `above`: centered just outside a `relative` anchor.
  * - `tag`: top-right overlay on a `relative` parent — use via `NewTag`.
  */
-export type BurningDotPlacement = 'above' | 'tag';
+export type BurningDotPlacement = 'inline' | 'above' | 'tag';
 
 const placementClasses: Record<BurningDotPlacement, string> = {
+  inline: 'pointer-events-none relative mx-auto size-7 shrink-0',
   above: 'pointer-events-none absolute left-1/2 -top-3 size-7 -translate-x-1/2',
   tag: 'pointer-events-none absolute -right-1 -top-1 size-7',
 };
