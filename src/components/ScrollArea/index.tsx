@@ -20,6 +20,7 @@ export function ScrollArea({ children, className }: ScrollAreaProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ startY: number; startScrollTop: number } | null>(null);
+  const touchRef = useRef<{ startY: number; startScrollTop: number } | null>(null);
   const [scrollTop, setScrollTop] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(0);
   const [contentHeight, setContentHeight] = useState(0);
@@ -51,15 +52,27 @@ export function ScrollArea({ children, className }: ScrollAreaProps) {
     [maxScrollTop]
   );
 
-  function handleWheel(event: WheelEvent<HTMLDivElement>) {
-    if (maxScrollTop <= 0) return;
-
-    event.preventDefault();
-    scrollTo(scrollTop + event.deltaY);
-  }
+  const scrollTopRef = useRef(scrollTop);
+  scrollTopRef.current = scrollTop;
+  const maxScrollTopRef = useRef(maxScrollTop);
+  maxScrollTopRef.current = maxScrollTop;
 
   function handleStep(direction: -1 | 1) {
     scrollTo(scrollTop + direction * 80);
+  }
+
+  function handleTouchStart(event: React.TouchEvent<HTMLDivElement>) {
+    touchRef.current = { startY: event.touches[0].clientY, startScrollTop: scrollTop };
+  }
+
+  function handleTouchMove(event: React.TouchEvent<HTMLDivElement>) {
+    if (!touchRef.current) return;
+    const delta = touchRef.current.startY - event.touches[0].clientY;
+    scrollTo(touchRef.current.startScrollTop + delta);
+  }
+
+  function handleTouchEnd() {
+    touchRef.current = null;
   }
 
   function handleThumbPointerDown(event: PointerEvent<HTMLButtonElement>) {
@@ -93,9 +106,28 @@ export function ScrollArea({ children, className }: ScrollAreaProps) {
     return () => resizeObserver.disconnect();
   }, [children, updateMeasurements]);
 
+  useEffect(() => {
+    const el = viewportRef.current;
+    if (!el) return;
+    const onWheel = (event: WheelEvent) => {
+      if (maxScrollTopRef.current <= 0) return;
+      event.preventDefault();
+      scrollTo(scrollTopRef.current + event.deltaY);
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <div className={classes} onWheel={handleWheel}>
-      <div ref={viewportRef} className="min-h-0 flex-1 overflow-hidden my-2">
+    <div className={classes}>
+      <div
+        ref={viewportRef}
+        className="min-h-0 flex-1 overflow-hidden my-2"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         <div ref={contentRef} style={{ transform: `translateY(-${scrollTop}px)` }}>
           <div className="flex flex-col mr-1 gap-y-2">
             {children}

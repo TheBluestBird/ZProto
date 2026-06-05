@@ -112,15 +112,16 @@ function MilestoneRow({ milestone, index }: { milestone: FactionMilestone; index
 
 function factionPanel(faction: Faction) {
   return (
-    <div className="flex h-full min-h-0 flex-col gap-4">
-      <div className="flex shrink-0 gap-4">
+    <div className="flex h-full min-h-0 flex-col gap-3">
+      <div className="flex flex-col sm:flex-row shrink-0 gap-3 sm:gap-4">
         <CaptainSidebar faction={faction} />
         <LorePanel title="What we know">
           <p>{faction.lore}</p>
         </LorePanel>
       </div>
 
-      <div className="flex min-h-0 flex-1">
+      {/* Desktop: two columns */}
+      <div className="hidden sm:flex min-h-0 flex-1">
         <div className="flex min-h-0 min-w-0 flex-[3] flex-col">
           <SectionHeading>Captain&apos;s errands</SectionHeading>
           <ScrollArea className="min-h-0 flex-1">
@@ -129,7 +130,6 @@ function factionPanel(faction: Faction) {
             ))}
           </ScrollArea>
         </div>
-
         <div className="flex min-h-0 min-w-0 flex-[2] flex-col border-l border-border-subtle pl-2">
           <SectionHeading>Reputation rewards</SectionHeading>
           <ScrollArea className="min-h-0 flex-1">
@@ -138,6 +138,22 @@ function factionPanel(faction: Faction) {
             ))}
           </ScrollArea>
         </div>
+      </div>
+
+      {/* Mobile: stacked scroll */}
+      <div className="flex sm:hidden min-h-0 flex-1 flex-col">
+        <ScrollArea className="min-h-0 flex-1">
+          <SectionHeading>Captain&apos;s errands</SectionHeading>
+          {faction.quests.map((q) => (
+            <DetailedQuestCard key={q.id} quest={q} />
+          ))}
+          <div className="mt-3 border-t border-border-subtle pt-3">
+            <SectionHeading>Reputation rewards</SectionHeading>
+            {faction.milestones.map((m, i) => (
+              <MilestoneRow key={m.reputation} milestone={m} index={i} />
+            ))}
+          </div>
+        </ScrollArea>
       </div>
     </div>
   );
@@ -149,6 +165,7 @@ export const reputationPage = definePage({
   title: "Reputation",
   icon,
   background,
+  transparentBackground: true,
   children: (
     <Book
       name="Reputation"

@@ -40,6 +40,7 @@ export type LibraryItem = {
   name: string;
   description: string;
   icon: string;
+  price?: number;
 };
 
 export type GameLibrary = {

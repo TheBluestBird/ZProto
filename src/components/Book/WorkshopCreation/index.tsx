@@ -59,20 +59,20 @@ export function WorkshopCreation({ skill }: WorkshopCreationProps) {
   return (
     <div className="flex h-full min-h-0 flex-col py-1">
       {workshopSkill.isCraft ? (
-        <div className="mb-4 grid shrink-0 grid-cols-[2fr_1fr] items-start gap-4">
-          <Portrait iconSrc={skill.icon} iconAlt={title} className="aspect-square h-auto w-[70%] justify-self-center" />
+        <div className="mb-2 grid shrink-0 grid-cols-[2fr_1fr] items-start gap-2">
+          <Portrait iconSrc={skill.icon} iconAlt={title} className="aspect-square h-auto w-[47%] justify-self-center" />
           <div className="min-w-0">{titleBlock}</div>
         </div>
       ) : (
-        <div className="mb-4 shrink-0">
+        <div className="mb-2 shrink-0">
           <div className="flex justify-center">
             <Portrait
               iconSrc={skill.icon}
               iconAlt={title}
-              className="aspect-square h-auto w-[46%]"
+              className="aspect-square h-auto w-[31%]"
             />
           </div>
-          <div className="mt-4 min-w-0">{titleBlock}</div>
+          <div className="mt-2 min-w-0">{titleBlock}</div>
         </div>
       )}
 

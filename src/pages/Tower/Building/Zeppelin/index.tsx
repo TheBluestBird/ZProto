@@ -17,15 +17,23 @@ export interface ZeppelinProps {
   /** Dock anchor as a fraction of the viewport (0..1). */
   anchorX?: number;
   anchorY?: number;
+  /** Pixel offset applied after the fractional anchor. */
+  offsetX?: number;
+  offsetY?: number;
+  /** Animation playback speed multiplier (1 = normal). */
+  timeScale?: number;
   /** World z-index (relative to sky / tower / flag). */
   zIndex?: number;
 }
 
-type Layout = { scale: number; anchorX: number; anchorY: number };
+type Layout = { scale: number; anchorX: number; anchorY: number; offsetX: number; offsetY: number };
 
 function place(app: Application, spine: Spine, layout: Layout) {
-  const { scale, anchorX, anchorY } = layout;
-  spine.position.set(app.screen.width * anchorX, app.screen.height * anchorY);
+  const { scale, anchorX, anchorY, offsetX, offsetY } = layout;
+  spine.position.set(
+    app.screen.width * anchorX + offsetX,
+    app.screen.height * anchorY + offsetY,
+  );
   spine.scale.set(scale);
 }
 
@@ -35,6 +43,9 @@ export function Zeppelin({
   scale = 1,
   anchorX = 0.5,
   anchorY = 0.42,
+  offsetX = 0,
+  offsetY = 0,
+  timeScale = 1,
   zIndex = 0,
 }: ZeppelinProps) {
   const stage = useGameStage();
@@ -45,11 +56,13 @@ export function Zeppelin({
   const loadTokenRef = useRef(0);
   const departureTokenRef = useRef(0);
   const stageRef = useRef<{ app: Application; world: Container } | null>(null);
-  const layoutRef = useRef<Layout>({ scale, anchorX, anchorY });
-  layoutRef.current = { scale, anchorX, anchorY };
+  const layoutRef = useRef<Layout>({ scale, anchorX, anchorY, offsetX, offsetY });
+  layoutRef.current = { scale, anchorX, anchorY, offsetX, offsetY };
 
   const destroySpine = (spine: Spine | null) => {
     if (!spine) return;
+    spine.autoUpdate = false;
+    spine.state.clearTracks();
     spine.parent?.removeChild(spine);
     spine.destroy();
     if (spineRef.current === spine) {
@@ -84,7 +97,7 @@ export function Zeppelin({
       initializedRef.current = false;
       destroyCurrentRef.current();
     };
-  }, [stage, zIndex, scale, anchorX, anchorY]);
+  }, [stage, zIndex, scale, anchorX, anchorY, offsetX, offsetY]);
 
   useEffect(() => {
     const stageValue = stageRef.current;
@@ -101,10 +114,13 @@ export function Zeppelin({
 
         if (spineRef.current && spineIdRef.current === zeppelinId) {
           if (prevPhase !== 'docked') {
-            spineRef.current.state.setAnimation(0, 'start', false);
-            spineRef.current.state.addAnimation(0, 'idle', true, 0);
+            const t1 = spineRef.current.state.setAnimation(0, 'start', false);
+            t1.timeScale = timeScale;
+            const t2 = spineRef.current.state.addAnimation(0, 'idle', true, 0);
+            t2.timeScale = timeScale;
           } else {
-            spineRef.current.state.setAnimation(0, 'idle', true);
+            const t = spineRef.current.state.setAnimation(0, 'idle', true);
+            t.timeScale = timeScale;
           }
           prevPhaseRef.current = phase;
           return;
@@ -132,10 +148,13 @@ export function Zeppelin({
 
         const isArrival = !isFirstSync && (prevPhase !== 'docked' || oldId !== zeppelinId);
         if (isArrival) {
-          spine.state.setAnimation(0, 'start', false);
-          spine.state.addAnimation(0, 'idle', true, 0);
+          const t1 = spine.state.setAnimation(0, 'start', false);
+          t1.timeScale = timeScale;
+          const t2 = spine.state.addAnimation(0, 'idle', true, 0);
+          t2.timeScale = timeScale;
         } else {
-          spine.state.setAnimation(0, 'idle', true);
+          const t = spine.state.setAnimation(0, 'idle', true);
+          t.timeScale = timeScale;
         }
       } else if (prevPhase === 'docked') {
         const departing = spineRef.current;
@@ -145,7 +164,12 @@ export function Zeppelin({
           track.listener = {
             complete: () => {
               if (departureToken !== departureTokenRef.current) return;
-              destroySpine(departing);
+              // Defer destruction outside the current ticker cycle to avoid
+              // physicsTranslate crash when destroying mid-internalUpdate.
+              requestAnimationFrame(() => {
+                if (departureToken !== departureTokenRef.current) return;
+                destroySpine(departing);
+              });
             },
           };
         } else {
@@ -160,7 +184,7 @@ export function Zeppelin({
     })().catch((err) => {
       console.error('[Zeppelin] transition failed', err);
     });
-  }, [stage, phase, zeppelinId, zIndex]);
+  }, [stage, phase, zeppelinId, zIndex, timeScale]);
 
   return null;
 }

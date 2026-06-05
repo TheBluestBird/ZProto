@@ -1,4 +1,3 @@
-import { TowerScene } from './TowerScene';
 import { definePage } from '../definePage';
 
 import background from './assets/background.png';
@@ -11,5 +10,4 @@ export const towerPage = definePage({
   icon,
   background,
   transparentBackground: true,
-  children: <TowerScene />,
 });

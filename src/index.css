@@ -34,14 +34,29 @@
   --button-gap: 20px;
   --tower-height: 72%;
   --tower-room-width: 50%;
-  --book-inset-top: 10rem;
-  --book-inset-x: 1.25rem;
-  --book-inset-bottom: 6rem;
+  --book-inset-top: 8rem;
+  --book-inset-x: 0.5rem;
+  --book-inset-bottom: 8rem;
   --book-max-width: 84rem;
   --book-tab-overlap: 6px;
   --book-tab-aspect-ratio: 258 / 59;
   --book-tab-max-width: 260px;
   --creation-create-max-width: 7.5rem;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --book-inset-top: 10rem;
+    --book-inset-x: 1.25rem;
+    --book-inset-bottom: 6rem;
+    --header-scale: 1;
+  }
+}
+
+@layer utilities {
+  .header-scale {
+    zoom: var(--header-scale, 0.5);
+  }
 }
 
 @layer utilities {

@@ -4,6 +4,7 @@ import { useNavigation } from '@navigation/useNavigation';
 
 import { Header } from './Header';
 import { NavItem } from './NavItem';
+import { TimeOfDayToggle } from './TimeOfDayToggle';
 
 export interface OverlayProps {
   className?: string;
@@ -21,6 +22,10 @@ export function Overlay({ className }: OverlayProps = {}) {
       <header className="pointer-events-none w-full">
         <Header />
       </header>
+
+      <div className="header-scale pointer-events-none absolute bottom-3 left-3 origin-bottom-left">
+        <TimeOfDayToggle />
+      </div>
 
       <footer className="pointer-events-none flex items-end justify-center pb-4">
         <div className="pointer-events-auto origin-bottom scale-70">

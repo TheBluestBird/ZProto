@@ -26,17 +26,17 @@ export function Ingredient({ ingredient, className }: IngredientProps) {
     <Frame
       className={classes}
       contentClassName={
-        'page-surface flex flex-col items-center gap-2 p-3 text-center' +
+        'page-surface flex flex-col items-center gap-1 p-1.5 text-center' +
         (isEmpty ? ' justify-center' : '')
       }
     >
-      <div className="icon-slot size-[4.5rem]">
+      <div className="icon-slot size-[3rem]">
         <img src={iconSrc} alt={isEmpty ? '' : title} className="size-full object-contain" />
       </div>
       {!isEmpty && (
         <>
-          <h3 className="m-0 w-full truncate font-serif text-base font-bold leading-snug">{title}</h3>
-          <p className="m-0 text-sm tabular-nums leading-snug opacity-75">
+          <h3 className="m-0 w-full truncate font-serif text-xs font-bold leading-snug">{title}</h3>
+          <p className="m-0 text-xs tabular-nums leading-snug opacity-75">
             {inventoryCount} / {requiredCount}
           </p>
         </>

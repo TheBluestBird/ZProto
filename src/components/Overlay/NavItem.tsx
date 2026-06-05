@@ -22,7 +22,7 @@ export function NavItem({
         alt=""
         decoding="async"
       />
-      <h2 className="pb-2 px-2">{title}</h2>
+      <h2 className="hidden sm:block pb-2 px-2">{title}</h2>
     </Button>
   );
 }

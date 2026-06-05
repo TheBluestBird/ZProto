@@ -33,6 +33,14 @@ function ProfessionLevelHeader({ professionId }: { professionId: ProfessionId })
   );
 }
 
+type MobileTab = 'skills' | 'create' | 'queue';
+
+const MOBILE_TABS: { id: MobileTab; label: string }[] = [
+  { id: 'skills', label: 'Browse' },
+  { id: 'create', label: 'Create' },
+  { id: 'queue', label: 'Queue' },
+];
+
 function WorkshopPanel({
   professionId,
   selectedSkillId,
@@ -42,12 +50,20 @@ function WorkshopPanel({
   selectedSkillId: string;
   onSelectSkill: (skillId: string) => void;
 }) {
+  const [mobileTab, setMobileTab] = useState<MobileTab>('skills');
   const activeSkill = gameLibrary.skills[selectedSkillId];
+
+  function handleSelectSkill(skillId: string) {
+    onSelectSkill(skillId);
+    setMobileTab('create');
+  }
 
   return (
     <div className="flex h-full min-h-0 flex-1 flex-col">
       <ProfessionLevelHeader professionId={professionId} />
-      <div className="flex h-full min-h-0 flex-1">
+
+      {/* Desktop: 3-column layout */}
+      <div className="hidden sm:flex h-full min-h-0 flex-1">
         <section className="flex min-h-0 min-w-0 flex-1 flex-col">
           <ScrollArea className="min-h-0 flex-1">
             <ProfessionSkillList
@@ -65,6 +81,50 @@ function WorkshopPanel({
         <section className="flex min-h-0 min-w-0 flex-1 flex-col ml-3">
           <WorkshopActivity professionId={professionId} />
         </section>
+      </div>
+
+      {/* Mobile: single panel with tab switcher */}
+      <div className="flex min-h-0 flex-1 flex-col sm:hidden">
+        <div className="min-h-0 flex-1 flex flex-col">
+          {mobileTab === 'skills' && (
+            <ScrollArea className="min-h-0 flex-1">
+              <ProfessionSkillList
+                professionId={professionId}
+                selectedSkillId={selectedSkillId}
+                onSelect={handleSelectSkill}
+              />
+            </ScrollArea>
+          )}
+          {mobileTab === 'create' && (
+            <div className="min-h-0 flex-1 flex flex-col overflow-y-auto">
+              {activeSkill ? <WorkshopCreation skill={activeSkill} /> : (
+                <p className="flex-1 flex items-center justify-center text-page-text/40 text-sm">
+                  Select a skill to create
+                </p>
+              )}
+            </div>
+          )}
+          {mobileTab === 'queue' && (
+            <WorkshopActivity professionId={professionId} />
+          )}
+        </div>
+        <div className="flex shrink-0 border-t border-button-text/40 mt-1">
+          {MOBILE_TABS.map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setMobileTab(tab.id)}
+              className={
+                'flex-1 py-2 text-sm font-bold font-serif transition-colors ' +
+                (mobileTab === tab.id
+                  ? 'text-button-text'
+                  : 'text-page-text/50')
+              }
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

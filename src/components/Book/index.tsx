@@ -50,12 +50,12 @@ function BookTabButton({
     >
       {isActive && <BurningDot placement="above" />}
       {icon ? (
-        <span className="flex items-center gap-2 pb-2">
-          <img src={icon} alt="" className="size-7 object-contain" />
-          <span className="font-serif text-xl font-bold leading-none">{label}</span>
+        <span className="flex items-center gap-1 pb-2 px-1">
+          <img src={icon} alt="" className="size-5 sm:size-7 object-contain" />
+          <span className="font-serif text-xs sm:text-xl font-bold leading-none">{label}</span>
         </span>
       ) : (
-        <span className="pb-2 text-2xl font-bold leading-none">{label}</span>
+        <span className="pb-2 px-1 text-sm sm:text-2xl font-bold leading-none">{label}</span>
       )}
     </button>
   );
@@ -70,14 +70,15 @@ export function Book({ name, panels }: BookProps) {
     if (linkedId) {
       setActivePanelId(linkedId);
     }
-  }, [tab, panels]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab]);
 
   const showTabs = panels.length > 1;
   const tabWidthPercent = panels.length > 0 ? 100 / panels.length : 100;
   const activePanel = panels.find((panel) => panel.id === activePanelId) ?? panels[0];
 
   return (
-    <div className="box-border flex h-dvh flex-col px-[var(--book-inset-x)] pt-[var(--book-inset-top)] pb-[var(--book-inset-bottom)]">
+    <div className="pointer-events-auto box-border flex h-dvh flex-col px-[var(--book-inset-x)] pt-[var(--book-inset-top)] pb-[var(--book-inset-bottom)]">
       <div className="book-wrapper mx-auto flex min-h-0 w-full max-w-[var(--book-max-width)] flex-1 flex-col">
         <h2 className="sr-only">{name}</h2>
         {showTabs && (

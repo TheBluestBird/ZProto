@@ -10,5 +10,6 @@ export const craftPage = definePage({
   title: "Craft",
   icon,
   background,
+  transparentBackground: true,
   children: <Workshop name="Craft" professionType="craft" />,
 });

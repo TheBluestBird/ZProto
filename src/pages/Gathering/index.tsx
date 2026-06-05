@@ -10,5 +10,6 @@ export const gatheringPage = definePage({
   title: "Gathering",
   icon,
   background,
+  transparentBackground: true,
   children: <Workshop name="Gathering" professionType="gathering" />,
 });

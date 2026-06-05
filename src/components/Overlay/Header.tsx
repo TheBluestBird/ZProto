@@ -17,13 +17,15 @@ export function Header({ className }: HeaderProps = {}) {
   return (
     <div className={classes}>
       <div className="pointer-events-auto flex w-full items-center gap-4 px-6 pt-4">
-        <div className="shrink-0">
+        <div className="header-scale shrink-0 origin-top-left">
           <CharacterPortrait />
         </div>
-        <h1 className="m-0 min-w-0 flex-1 text-center whitespace-nowrap text-button-text">
+        <h1 className="m-0 min-w-0 flex-1 text-center whitespace-nowrap text-button-text text-xl sm:text-4xl">
           {page.title}
         </h1>
-        <VisitStatus />
+        <div className="header-scale shrink-0 origin-top-right">
+          <VisitStatus />
+        </div>
       </div>
     </div>
   );
