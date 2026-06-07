@@ -1,0 +1,18 @@
+/* Mobile: pass children through to the viewport-sized page root. */
+.craft-badge-layer {
+  display: contents;
+}
+
+/* Desktop: tower-shaped box for craft badge x/y alignment with Pixi rooms. */
+@media (min-width: 640px) {
+  .craft-badge-layer {
+    display: block;
+    position: absolute;
+    left: var(--tower-center-left);
+    top: var(--tower-center-top);
+    height: var(--tower-height);
+    width: auto;
+    transform: translate(-50%, -50%);
+    aspect-ratio: var(--tower-aspect);
+  }
+}

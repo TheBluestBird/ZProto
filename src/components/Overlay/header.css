@@ -1,15 +1,51 @@
 /*
- * Overlay header: one compact layout below 640px, full size at sm+.
- * Child blocks use the class names defined here — avoid duplicating sm: rules in TSX.
+ * Overlay header: compact tokens below 640px, full size at sm+.
+ * Page title sits on its own row on mobile; from sm+ it shares the bar, top-aligned
+ * so it stays in the header band instead of sinking with the tall portrait.
  */
 
 .overlay-header {
+  color: var(--color-button-text);
+
   --header-frame-scale: 0.26;
   --header-coin-frame-scale: 0.2;
   --header-gap: 0.25rem;
-  --header-pad-x: 0.5rem;
   --header-pad-top: 0.5rem;
+  --header-pad-x: 0.5rem;
   --header-pad-bottom: 1rem;
+
+  --header-portrait: 4.5rem;
+  --header-block-gap: 0.375rem;
+  --header-details-gap: 0.25rem;
+  --header-info-gap: 0.125rem;
+
+  --header-badge-size: 1.5rem;
+  --header-badge-label: 0.75rem;
+
+  --header-title: 2rem;
+  --header-name: 0.75rem;
+  --header-status: 0.625rem;
+  --header-heading-line: 1.25;
+
+  --header-progress-max: 6.5rem;
+  --header-progress-min: 0;
+  --header-progress-height: var(--spacing-progress-bar-sm);
+  --header-progress-label: 0.5rem;
+  --header-progress-label-pad: 0 0.375rem;
+
+  --header-coin-gap: 0.25rem;
+  --header-coin-pad: 0.0625rem 0.25rem;
+  --header-coin-icon: 0.875rem;
+  --header-coin-text: 0.75rem;
+
+  --header-visit-gap: 0.5rem;
+  --header-visit-btn-gap: 0.375rem;
+  --header-visit-btn-pad: 0.25rem 0.375rem;
+  --header-visit-icon: 1.75rem;
+  --header-visit-text: 0.75rem;
+  --header-visit-subtext: 0.625rem;
+  --header-visit-incoming-w: 12ch;
+  --header-visit-docked-max: 9.5rem;
 }
 
 @media (min-width: 640px) {
@@ -17,9 +53,41 @@
     --header-frame-scale: 0.45;
     --header-coin-frame-scale: 0.3;
     --header-gap: 1rem;
-    --header-pad-x: 1.5rem;
     --header-pad-top: 1rem;
-    --header-pad-bottom: 2rem;
+    --header-pad-x: 1.5rem;
+    --header-pad-bottom: 1rem;
+
+    --header-portrait: 10rem;
+    --header-block-gap: 0.75rem;
+    --header-details-gap: 1rem;
+    --header-info-gap: 0.375rem;
+
+    --header-badge-size: 3rem;
+    --header-badge-label: 1.25rem;
+
+    --header-title: 2.25rem;
+    --header-name: 2.25rem;
+    --header-status: 1.25rem;
+    --header-heading-line: normal;
+
+    --header-progress-max: none;
+    --header-progress-min: 11rem;
+    --header-progress-height: var(--spacing-progress-bar-lg);
+    --header-progress-label: 0.875rem;
+    --header-progress-label-pad: 0.25rem 1rem;
+
+    --header-coin-gap: 0.75rem;
+    --header-coin-pad: 0.25rem 0.5rem;
+    --header-coin-icon: 1.5rem;
+    --header-coin-text: 1rem;
+
+    --header-visit-btn-gap: 1rem;
+    --header-visit-btn-pad: 0.5rem 1rem;
+    --header-visit-icon: 3rem;
+    --header-visit-text: 1rem;
+    --header-visit-subtext: 1rem;
+    --header-visit-incoming-w: 18ch;
+    --header-visit-docked-max: none;
   }
 }
 
@@ -38,12 +106,10 @@
   margin: 0;
   min-width: 0;
   justify-self: center;
-  padding-inline: 0.125rem;
   text-align: center;
-  font-size: 0.875rem;
+  font-size: var(--header-title);
   font-weight: 700;
-  line-height: 1.25;
-  color: var(--color-button-text);
+  line-height: var(--header-heading-line);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -53,127 +119,89 @@
   .overlay-header__bar {
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     grid-template-rows: auto;
+    align-items: start;
   }
 
   .overlay-header .page-title {
     grid-column: auto;
     grid-row: auto;
-    max-width: none;
+    align-self: start;
     padding-inline: 0.5rem;
-    font-size: 2.25rem;
-    line-height: normal;
+  }
+
+  .overlay-header .header-visit-copy :where(h3, h4) {
+    white-space: nowrap;
   }
 }
 
-/* Character portrait block */
 .overlay-header .character-portrait-block {
   display: flex;
   min-width: 0;
   align-items: center;
-  gap: 0.375rem;
-}
-
-@media (min-width: 640px) {
-  .overlay-header .character-portrait-block {
-    gap: 0.75rem;
-  }
+  gap: var(--header-block-gap);
 }
 
 .overlay-header .portrait.character-portrait {
-  width: 4.5rem;
+  width: var(--header-portrait);
   aspect-ratio: 1;
   height: auto;
 }
 
-@media (min-width: 640px) {
-  .overlay-header .portrait.character-portrait {
-    width: 10rem;
-  }
-}
-
 .overlay-header .character-portrait-block .level-badge {
-  transform: scale(0.5);
+  width: var(--header-badge-size);
+  height: var(--header-badge-size);
   transform-origin: bottom right;
 }
 
-@media (min-width: 640px) {
-  .overlay-header .character-portrait-block .level-badge {
-    transform: none;
-  }
+.overlay-header .character-portrait-block .level-badge h2 {
+  font-size: var(--header-badge-label);
 }
 
 .overlay-header .character-portrait-details {
   display: flex;
   min-width: 0;
   align-items: center;
-  gap: 0.25rem;
-}
-
-@media (min-width: 640px) {
-  .overlay-header .character-portrait-details {
-    gap: 1rem;
-  }
+  gap: var(--header-details-gap);
 }
 
 .overlay-header .player-info {
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: 0.125rem;
-}
-
-@media (min-width: 640px) {
-  .overlay-header .player-info {
-    gap: 0.375rem;
-  }
+  gap: var(--header-info-gap);
 }
 
 .overlay-header .player-name {
-  margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 0.75rem;
+  font-size: var(--header-name);
   font-weight: 700;
-  line-height: 1.25;
+  line-height: var(--header-heading-line);
 }
 
 .overlay-header .player-status {
-  margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 0.625rem;
-  line-height: 1.25;
-}
-
-@media (min-width: 640px) {
-  .overlay-header .player-name {
-    font-size: 2.25rem;
-    line-height: normal;
-  }
-
-  .overlay-header .player-status {
-    font-size: 1.25rem;
-  }
+  font-size: var(--header-status);
+  line-height: var(--header-heading-line);
 }
 
 .overlay-header .level-progress {
   width: 100%;
-  min-width: 0;
-  max-width: 6.5rem;
+  min-width: var(--header-progress-min);
+  max-width: var(--header-progress-max);
+  height: var(--header-progress-height);
+  min-height: var(--header-progress-height);
 }
 
-@media (min-width: 640px) {
-  .overlay-header .level-progress {
-    max-width: none;
-    min-width: 11rem;
-    height: var(--spacing-progress-bar-lg);
-    min-height: var(--spacing-progress-bar-lg);
-  }
+.overlay-header .level-progress > .label {
+  padding: var(--header-progress-label-pad);
+  font-size: var(--header-progress-label);
+  line-height: var(--header-heading-line);
 }
 
-/* Framed panels in the header (visit, coin) */
 .overlay-header .header-panel {
   --frame-scale: var(--header-frame-scale);
 }
@@ -187,52 +215,30 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
-  padding: 0.0625rem 0.25rem;
-  color: var(--color-button-text);
-}
-
-@media (min-width: 640px) {
-  .overlay-header .coin-badge-inner {
-    gap: 0.75rem;
-    padding: 0.25rem 0.5rem;
-  }
+  gap: var(--header-coin-gap);
+  padding: var(--header-coin-pad);
 }
 
 .overlay-header .coin-badge-inner img {
-  width: 0.875rem;
-  height: 0.875rem;
-}
-
-@media (min-width: 640px) {
-  .overlay-header .coin-badge-inner img {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
+  width: var(--header-coin-icon);
+  height: var(--header-coin-icon);
 }
 
 .overlay-header .coin-badge-inner .coin-amount {
   margin: 0;
   margin-top: -0.25rem;
   min-width: 3ch;
-  font-size: 0.75rem;
+  font-size: var(--header-coin-text);
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
 
-@media (min-width: 640px) {
-  .overlay-header .coin-badge-inner .coin-amount {
-    font-size: 1rem;
-  }
-}
-
-/* Visit status */
 .overlay-header .header-visit {
   display: flex;
   min-width: 0;
   flex-shrink: 0;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--header-visit-gap);
 }
 
 .overlay-header .header-visit-button {
@@ -242,96 +248,47 @@
   cursor: pointer;
   appearance: none;
   align-items: center;
-  gap: 0.375rem;
+  gap: var(--header-visit-btn-gap);
   border: 0;
   background: transparent;
-  padding: 0.25rem 0.375rem;
+  padding: var(--header-visit-btn-pad);
   text-align: left;
-  color: var(--color-button-text);
-}
-
-@media (min-width: 640px) {
-  .overlay-header .header-visit-button {
-    gap: 1rem;
-    padding: 0.5rem 1rem;
-  }
 }
 
 .overlay-header .header-visit-button img {
-  width: 1.75rem;
-  height: 1.75rem;
+  width: var(--header-visit-icon);
+  height: var(--header-visit-icon);
   flex-shrink: 0;
   object-fit: contain;
-}
-
-@media (min-width: 640px) {
-  .overlay-header .header-visit-button img {
-    width: 3rem;
-    height: 3rem;
-  }
 }
 
 .overlay-header .header-visit-copy {
   display: inline-grid;
   min-width: 0;
   flex-shrink: 1;
-  font-size: 0.75rem;
-  line-height: 1.25;
-}
-
-@media (min-width: 640px) {
-  .overlay-header .header-visit-copy {
-    font-size: 1rem;
-  }
+  font-size: var(--header-visit-text);
+  line-height: var(--header-heading-line);
 }
 
 .overlay-header .header-visit-copy--incoming {
-  width: 12ch;
-}
-
-@media (min-width: 640px) {
-  .overlay-header .header-visit-copy--incoming {
-    width: 18ch;
-  }
+  width: var(--header-visit-incoming-w);
 }
 
 .overlay-header .header-visit-copy--docked {
-  max-width: 9.5rem;
-}
-
-@media (min-width: 640px) {
-  .overlay-header .header-visit-copy--docked {
-    max-width: none;
-  }
+  max-width: var(--header-visit-docked-max);
 }
 
 .overlay-header .header-visit-copy :where(h3, h4) {
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .overlay-header .header-visit-copy h3 {
-  font-size: inherit;
   font-weight: 700;
 }
 
 .overlay-header .header-visit-copy h4 {
-  font-size: 0.625rem;
+  font-size: var(--header-visit-subtext);
   opacity: 0.8;
-}
-
-@media (min-width: 640px) {
-  .overlay-header .header-visit-copy h4 {
-    font-size: inherit;
-    white-space: nowrap;
-  }
-
-  .overlay-header .header-visit-copy h3 {
-    white-space: nowrap;
-  }
-}
-
-.overlay-header .header-visit-copy h3,
-.overlay-header .header-visit-copy h4 {
-  overflow: hidden;
-  text-overflow: ellipsis;
 }

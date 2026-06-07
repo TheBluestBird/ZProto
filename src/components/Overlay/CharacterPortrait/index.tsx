@@ -26,7 +26,7 @@ export function CharacterPortrait({
         <div className="absolute bottom-0 right-0 z-2">
           <LevelBadge
             level={level}
-            size="large"
+            size="small"
             className="level-badge"
             {...(onLevelBadgeDoubleClick ? { onDoubleClick: onLevelBadgeDoubleClick } : {})}
           />

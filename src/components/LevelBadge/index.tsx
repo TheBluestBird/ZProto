@@ -51,7 +51,7 @@ export function LevelBadge({
         decoding="async"
       />
       <h2
-        className={`z-10 col-start-1 row-start-1 select-none text-center leading-none ${classes.label} -mt-1`}
+        className={`z-10 col-start-1 row-start-1 select-none text-center leading-none ${classes.label}`}
       >
         {level.value}
       </h2>

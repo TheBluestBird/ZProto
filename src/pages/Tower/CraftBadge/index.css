@@ -1,0 +1,27 @@
+.craft-badge--craft,
+.craft-badge--gathering {
+  top: calc(var(--tower-band-top) + var(--badge-y) * var(--tower-height) / 100);
+  transform: translateY(-50%);
+}
+
+.craft-badge--craft {
+  left: 5%;
+}
+
+.craft-badge--gathering {
+  right: 5%;
+  left: auto;
+}
+
+@media (min-width: 640px) {
+  .craft-badge--craft {
+    top: calc(var(--badge-y) * 1%);
+    left: calc(var(--badge-x) * 1%);
+    transform: translate(-50%, -50%);
+  }
+
+  .craft-badge--gathering {
+    left: 5%;
+    right: auto;
+  }
+}
